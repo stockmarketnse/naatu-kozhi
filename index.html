@@ -789,8 +789,8 @@
 <!-- ─── NAVIGATION ─── -->
 <nav>
   <a class="nav-logo" href="#">
-    <div class="logo-icon">🐓</div>
-    <div class="logo-text">Vimal Thangaraj<span>Farms</span></div>
+    <div class="logo-icon"><img src="VT Farms Logo Rev-02.png" alt="Logo" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"></div>
+    <div class="logo-text">Vimal Thangaraj <span>Farms</span></div>
   </a>
   <ul class="nav-links">
     <li><a onclick="scrollToSection('products')">Shop</a></li>
@@ -995,9 +995,11 @@
       <span class="cart-total-value" id="cartTotalValue">₹0</span>
     </div>
     <div class="cart-delivery-note" id="deliveryNote">Add items worth ₹499 for free delivery</div>
-    <button class="btn-checkout" id="checkoutBtn" onclick="initiateCheckout()">
-      Proceed to Checkout →
-    </button>
+    <a href="https://wa.me/919708886124?text=Hi%20Vimal%20Thangaraj%20Farms,%20I%20would%20like%20to%20place%20an%20order" 
+   style="background-color: #25d366; color: white; padding: 15px; text-decoration: none; display: block; text-align: center; border-radius: 5px; font-weight: bold; margin-top: 20px; font-size: 18px;" 
+   target="_blank">
+   Order on WhatsApp →
+</a>
   </div>
 </div>
 
@@ -1590,6 +1592,24 @@ function showToast(message, type = 'info') {
   setTimeout(() => toast.remove(), 3200);
 }
 </script>
+<a href="https://wa.me/919708886124?text=I%20want%20to%20order%20fresh%20country%20chicken" 
+   class="whatsapp-float" 
+   target="_blank">
+   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="60">
+</a>
+
+<style>
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366;
+    border-radius: 50px;
+    padding: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+</style>
 
 </body>
 </html>
