@@ -1167,8 +1167,7 @@ let wishlist = JSON.parse(localStorage.getItem('nk_wishlist') || '[]');
 //  INIT
 // ══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', async () => {
-  renderProducts();
-  updateCartUI();
+  updateCartAndUI(); // This now handles both rendering and UI updates
   await checkSession();
 });
 
@@ -1269,39 +1268,51 @@ function getFilteredProducts() {
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   const products = getFilteredProducts();
-  grid.innerHTML = products.map(p => `
-    <div class="product-card" id="product-${p.id}">
-      ${p.badge ? `<div class="product-badge ${p.badgeType}">${p.badge}</div>` : ''}
-      <div class="product-img">
-        <span>${p.emoji}</span>
-        <button class="product-wishlist" onclick="toggleWishlist(${p.id})" title="Wishlist">
-          ${wishlist.includes(p.id) ? '❤️' : '🤍'}
-        </button>
-      </div>
-      <div class="product-info">
-        <div class="product-category">${p.category.replace('-', ' ')}</div>
-        <div class="product-name">${p.name}</div>
-        <div class="product-desc">${p.desc}</div>
-        <div class="product-meta">
-          <span class="product-weight">⚖️ ${p.weight}</span>
-          <span class="product-rating">★ ${p.rating} (${p.reviews})</span>
-        </div>
-        <div class="product-footer">
-          <div class="product-price">
-            ₹${p.price}
-            ${p.oldPrice ? `<span class="old-price">₹${p.oldPrice}</span>` : ''}
-          </div>
-          <button class="btn-add-cart ${isInCart(p.id) ? 'added' : ''}"
-            id="addBtn-${p.id}"
-            onclick="addToCart(${p.id})">
-            ${isInCart(p.id) ? '✓ Added' : '+ Add'}
+  
+  grid.innerHTML = products.map(p => {
+    // 1. Calculate the quantity first (outside the HTML string)
+    const itemInCart = cart.find(i => i.id === p.id);
+    const qty = itemInCart ? itemInCart.qty : 0;
+
+    // 2. Create the button HTML variable (shows +Add or - Qty +)
+    const buttonHTML = qty > 0 
+        ? `<div class="qty-control-menu" style="display: flex; align-items: center; gap: 12px; background: #FDF6EC; padding: 6px 14px; border-radius: 40px; border: 1.5px solid rgba(196, 82, 42, 0.15);">
+             <button class="qty-btn" onclick="updateQty(${p.id}, -1)" style="width:32px; height:32px; border-radius:50%; border:none; background:white; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; touch-action:manipulation; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">−</button>
+             <span class="qty-num" style="font-weight:700; min-width:20px; text-align:center; font-size: 16px;">${qty}</span>
+             <button class="qty-btn" onclick="updateQty(${p.id}, 1)" style="width:32px; height:32px; border-radius:50%; border:none; background:white; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center; touch-action:manipulation; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">+</button>
+           </div>`
+        : `<button class="btn-add-cart" onclick="addToCart(${p.id})">+ Add</button>`;
+
+    // 3. Return the full product card HTML
+    return `
+      <div class="product-card" id="product-${p.id}">
+        ${p.badge ? `<div class="product-badge ${p.badgeType}">${p.badge}</div>` : ''}
+        <div class="product-img">
+          <span>${p.emoji}</span>
+          <button class="product-wishlist" onclick="toggleWishlist(${p.id})" title="Wishlist">
+            ${wishlist.includes(p.id) ? '❤️' : '🤍'}
           </button>
         </div>
+        <div class="product-info">
+          <div class="product-category">${p.category.replace('-', ' ')}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-desc">${p.desc}</div>
+          <div class="product-meta">
+            <span class="product-weight">⚖️ ${p.weight}</span>
+            <span class="product-rating">★ ${p.rating} (${p.reviews})</span>
+          </div>
+          <div class="product-footer">
+            <div class="product-price">
+              ₹${p.price}
+              ${p.oldPrice ? `<span class="old-price">₹${p.oldPrice}</span>` : ''}
+            </div>
+            ${buttonHTML}
+          </div>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
-
 function filterByCategory(cat, el) {
   activeCategory = cat;
   document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
@@ -1323,33 +1334,39 @@ function sortProducts(sort, el) {
 function isInCart(id) { return cart.some(i => i.id === id); }
 
 function addToCart(productId) {
-  const product = PRODUCTS.find(p => p.id === productId);
-  const existing = cart.find(i => i.id === productId);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
-  saveCart();
-  updateCartUI();
-  renderProducts();
-  showToast(`${product.name} added to cart! 🛒`, 'success');
+    const product = PRODUCTS.find(p => p.id === productId);
+    const existing = cart.find(i => i.id === productId);
+    
+    if (existing) {
+        existing.qty++;
+    } else {
+        cart.push({ ...product, qty: 1 });
+    }
+    
+    // REPLACE your old save/update lines with this one line:
+    updateCartAndUI(); 
+    
+    showToast(`${product.name} added! 🛒`, 'success');
 }
 
 function removeFromCart(productId) {
-  cart = cart.filter(i => i.id !== productId);
-  saveCart();
-  updateCartUI();
-  renderCartSidebar();
-  renderProducts();
+    cart = cart.filter(i => i.id !== productId);
+    updateCartAndUI(); // Use the master update instead of saveCart
 }
 
 function updateQty(productId, delta) {
-  const item = cart.find(i => i.id === productId);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) removeFromCart(productId);
-  else { saveCart(); updateCartUI(); renderCartSidebar(); }
+    const item = cart.find(i => i.id === productId);
+    if (!item) return;
+
+    item.qty += delta;
+
+    // If quantity becomes 0, remove the item
+    if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== productId);
+    }
+
+    // This is the most important line to fix the lag and price
+    updateCartAndUI(); 
 }
 
 function saveCart() { localStorage.setItem('nk_cart', JSON.stringify(cart)); }
@@ -1589,8 +1606,39 @@ function showToast(message, type = 'info') {
   toast.innerHTML = `<span>${icons[type]}</span><span>${message}</span>`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3200);
+
+}
+
+function updateCartAndUI() {
+    // 1. Recalculate totals directly from the cart array
+    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+    // 2. Update the Cart Badge (the number on the icon)
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) cartBadge.textContent = totalQty;
+
+    // 3. Update the Price in the Sidebar
+    const cartTotalValue = document.getElementById('cartTotalValue');
+    if (cartTotalValue) cartTotalValue.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+    
+    // 4. Update the Delivery Note
+    const note = document.getElementById('deliveryNote');
+    if (note) {
+        if (totalPrice >= 499) {
+            note.textContent = '🎉 You\'ve unlocked free delivery!';
+        } else {
+            note.textContent = `Add items worth ₹${499 - totalPrice} more for free delivery`;
+        }
+    }
+
+    // 5. Save the state and redraw all visuals
+    localStorage.setItem('nk_cart', JSON.stringify(cart));
+    renderCartSidebar();
+    renderProducts(); 
 }
 </script>
+
 <a href="https://wa.me/919708886124?text=I%20want%20to%20order%20fresh%20country%20chicken" 
    class="whatsapp-float" 
    target="_blank">
