@@ -843,13 +843,10 @@
 
 <!-- ─── TRUST BAR ─── -->
 <div class="trust-bar">
-  <div class="trust-item"><span class="icon">🌿</span> 100% Organic Feed</div>
-  <div class="trust-item"><span class="icon">❄️</span> Cold Chain Delivery</div>
-  <div class="trust-item"><span class="icon">✅</span> FSSAI Certified</div>
+  <div class="trust-item"><span class="icon">🌿</span> இயற்கை உணவு நோயற்ற வாழ்வு</div>
+  <div class="trust-item"><span class="icon">🥚</span> பாரம்பரிய சுவை, சுத்தமான முறை</div>
   <div class="trust-item"><span class="icon">🚚</span> Free Delivery ₹499+</div>
-  <div class="trust-item"><span class="icon">🔄</span> Easy Returns</div>
 </div>
-
 <!-- ─── CATEGORIES ─── -->
 <section class="categories" id="categories">
   <div class="section-label">Browse By Cut</div>
@@ -1606,11 +1603,18 @@ function showToast(message, type = 'info') {
     bottom: 20px;
     right: 20px;
     background-color: #25d366;
-    border-radius: 50px;
-    padding: 10px;
+    width: 60px;          /* Forced width */
+    height: 60px;         /* Forced height */
+    border-radius: 50%;   /* Ensures a perfect circle */
+    display: flex;        /* Centers the icon inside */
+    align-items: center;
+    justify-content: center;
     box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
     z-index: 1000;
-    transition: opacity 0.3s;
+    transition: transform 0.3s, opacity 0.3s;
+}
+.whatsapp-float:hover {
+    transform: scale(1.1); /* Makes it pop slightly when touched */
 }
 
 body.cart-open .whatsapp-float {
