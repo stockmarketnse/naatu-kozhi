@@ -1072,89 +1072,89 @@ const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ══════════════════════════════════════════════
 const PRODUCTS = [
   {
-    id: 1, name: 'Whole Country Chicken', category: 'whole',
+    id: 1, name: 'முழு நாட்டுக்கோழி (Whole Chicken)', category: 'whole',
     price: 599, oldPrice: 749, weight: '~1 kg',
-    emoji: '🐓', badge: 'Best Seller', badgeType: 'hot',
-    desc: 'Full free-range country chicken, cleaned and dressed. Perfect for Sunday biriyani.',
+    emoji: '🐓', image: 'whole-chicken.jpg', badge: 'Best Seller', badgeType: 'hot',
+    desc: 'இயற்கையான முறையில் வளர்ந்த முழு நாட்டுக்கோழி. ஞாயிற்றுக்கிழமை பிரியாணிக்கு சிறந்தது.',
     rating: 4.9, reviews: 248
   },
   {
-    id: 2, name: 'Curry Cut Naatu', category: 'curry-cut',
+    id: 2, name: 'கறி துண்டுகள் (Curry Cut)', category: 'curry-cut',
     price: 349, oldPrice: null, weight: '500g',
-    emoji: '🥘', badge: 'Fresh Today', badgeType: '',
-    desc: 'Perfectly portioned curry-cut pieces for authentic naatu chicken curry.',
+    emoji: '🥘', image: 'curry-cut.jpg', badge: 'Fresh Today', badgeType: '',
+    desc: 'சுவையான நாட்டுக்கோழி குழம்பு வைக்க ஏற்ற சரியான அளவில் வெட்டப்பட்ட துண்டுகள்.',
     rating: 4.8, reviews: 186
   },
   {
-    id: 3, name: 'Boneless Breast Strips', category: 'boneless',
+    id: 3, name: 'எலும்பில்லாத துண்டுகள் (Boneless Strips)', category: 'boneless',
     price: 429, oldPrice: 499, weight: '500g',
-    emoji: '🍗', badge: 'New', badgeType: 'new',
-    desc: 'Tender boneless breast strips, ideal for grilling, frying or quick stir-fries.',
+    emoji: '🍗', image: 'boneless-strips.jpg', badge: 'New', badgeType: 'new',
+    desc: 'மென்மையான எலும்பில்லாத துண்டுகள், கிரில் அல்லது வறுவலுக்கு மிகவும் ஏற்றது.',
     rating: 4.7, reviews: 92
   },
   {
-    id: 4, name: 'Drumstick Pack', category: 'special',
+    id: 4, name: 'நாட்டுக்கோழி கால்கள் (Drumstick Pack)', category: 'special',
     price: 319, oldPrice: null, weight: '6 pieces',
-    emoji: '🍖', badge: null, badgeType: '',
-    desc: 'Juicy country chicken drumsticks — kids and adults love these at BBQs.',
+    emoji: '🍖', image: 'drumsticks.jpg', badge: null, badgeType: '',
+    desc: 'குழந்தைகள் முதல் பெரியவர்கள் வரை அனைவரும் விரும்பும் ஜூசி நாட்டுக்கோழி கால்கள்.',
     rating: 4.8, reviews: 143
   },
   {
-    id: 5, name: 'Whole Chicken (Family)', category: 'whole',
+    id: 5, name: 'முழு நாட்டுக்கோழி - பெரியது (Family Pack)', category: 'whole',
     price: 1099, oldPrice: 1349, weight: '~2 kg',
-    emoji: '🐔', badge: 'Best Value', badgeType: 'hot',
-    desc: 'Large whole naatu kozhi for big family meals. Rich flavour, tender texture.',
+    emoji: '🐔', image: 'whole-chicken-large.jpg', badge: 'Best Value', badgeType: 'hot',
+    desc: 'பெரிய குடும்ப விருந்துகளுக்கு ஏற்ற முழு நாட்டுக்கோழி. சிறந்த சுவை மற்றும் தரம்.',
     rating: 4.9, reviews: 312
   },
   {
-    id: 6, name: 'Boneless Thigh Pieces', category: 'boneless',
+    id: 6, name: 'தொடைக் கறி துண்டுகள் (Boneless Thigh)', category: 'boneless',
     price: 479, oldPrice: null, weight: '500g',
-    emoji: '🥩', badge: null, badgeType: '',
-    desc: 'Flavour-packed boneless thigh meat — the most popular cut for curries and fry.',
+    emoji: '🥩', image: 'thigh-meat.jpg', badge: null, badgeType: '',
+    desc: 'மிகவும் சுவையான தொடைக் கறி துண்டுகள் - வறுவல் மற்றும் பிரியாணிக்கு ஏற்றது.',
     rating: 4.8, reviews: 167
   },
   {
-    id: 7, name: 'Country Chicken Keema', category: 'boneless',
+    id: 7, name: 'நாட்டுக்கோழி கீமா (Chicken Keema)', category: 'boneless',
     price: 399, oldPrice: 449, weight: '500g',
-    emoji: '🫕', badge: 'New', badgeType: 'new',
-    desc: 'Freshly minced naatu chicken. Perfect for kebabs, cutlets, and keema curry.',
+    emoji: '🫕', image: 'keema.jpg', badge: 'New', badgeType: 'new',
+    desc: 'புத்தம் புதிய நாட்டுக்கோழி கீமா. கபாப் மற்றும் கீமா மசாலா செய்ய சிறந்தது.',
     rating: 4.7, reviews: 58
   },
   {
-    id: 8, name: 'Wings & Neck Combo', category: 'special',
+    id: 8, name: 'இறக்கைகள் மற்றும் கழுத்து (Wings & Neck)', category: 'special',
     price: 249, oldPrice: null, weight: '500g',
-    emoji: '🍗', badge: null, badgeType: '',
-    desc: 'Flavourful wings and neck pieces. Slow cooked, these make the richest stock.',
+    emoji: '🍗', image: 'wings-neck.jpg', badge: null, badgeType: '',
+    desc: 'சுவையான இறக்கைகள் மற்றும் கழுத்து துண்டுகள். சூப் வைக்க மிகவும் சிறந்தது.',
     rating: 4.6, reviews: 74
   },
   {
-    id: 9, name: 'Curry Cut (Small)', category: 'curry-cut',
+    id: 9, name: 'சிறிய கறி துண்டுகள் (Curry Cut Small)', category: 'curry-cut',
     price: 229, oldPrice: null, weight: '250g',
-    emoji: '🥘', badge: null, badgeType: '',
-    desc: 'Smaller pack of curry cut for singles or couples. Fresh same-day delivery.',
+    emoji: '🥘', image: 'curry-cut-small.jpg', badge: null, badgeType: '',
+    desc: 'தனியாகவோ அல்லது ஜோடியாகவோ இருப்பவர்களுக்கு ஏற்ற சிறிய பேக்.',
     rating: 4.7, reviews: 89
   },
   {
-    id: 10, name: 'Jointed Half Bird', category: 'whole',
+    id: 10, name: 'பாதி நாட்டுக்கோழி (Half Bird)', category: 'whole',
     price: 329, oldPrice: 399, weight: '~500g',
-    emoji: '🐓', badge: null, badgeType: '',
-    desc: 'Half of a naatu kozhi, pre-jointed and ready to cook. Great for 2 servings.',
+    emoji: '🐓', image: 'half-chicken.jpg', badge: null, badgeType: '',
+    desc: 'பாதி நாட்டுக்கோழி, சுத்தம் செய்யப்பட்டு சமைக்க தயாராக உள்ளது.',
     rating: 4.8, reviews: 112
   },
   {
-    id: 11, name: 'Curry Cut (Large)', category: 'curry-cut',
+    id: 11, name: 'பெரிய கறி துண்டுகள் பேக் (Curry Cut Large)', category: 'curry-cut',
     price: 649, oldPrice: 749, weight: '1 kg',
-    emoji: '🥣', badge: 'Popular', badgeType: 'hot',
-    desc: 'Party-size curry cut pack for large gatherings. Consistently fresh and tender.',
+    emoji: '🥣', image: 'curry-cut-large.jpg', badge: 'Popular', badgeType: 'hot',
+    desc: 'பெரிய விசேஷங்களுக்கு ஏற்ற கறி துண்டுகள் பேக். எப்போதும் ஃப்ரெஷ் மற்றும் தரம்.',
     rating: 4.9, reviews: 203
   },
   {
-    id: 12, name: 'Boneless Cubes', category: 'boneless',
+    id: 12, name: 'எலும்பில்லாத க்யூப்ஸ் (Boneless Cubes)', category: 'boneless',
     price: 459, oldPrice: null, weight: '500g',
-    emoji: '🧩', badge: null, badgeType: '',
-    desc: 'Uniformly cut boneless cubes perfect for skewers, tikka, and biryani.',
+    emoji: '🧩', image: 'boneless-cubes.jpg', badge: null, badgeType: '',
+    desc: 'டிக்கா மற்றும் பிரியாணி செய்ய ஏற்ற சீரான எலும்பில்லாத க்யூப்ஸ் துண்டுகள்.',
     rating: 4.7, reviews: 134
-  },
+  }
 ];
 
 // ══════════════════════════════════════════════
