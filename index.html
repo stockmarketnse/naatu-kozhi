@@ -6,7 +6,6 @@
   <title>Vimal Thangaraj Farms - Fresh Country Chicken</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     :root {
       --cream: #FDF6EC;
@@ -222,10 +221,11 @@
     }
     .stat { }
     .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px; font-weight: 700;
-      color: var(--terracotta);
-    }
+  font-family: 'DM Sans', sans-serif;
+  font-size: 30px; 
+  font-weight: 700;
+  color: var(--terracotta);
+}
     .stat-label { font-size: 13px; color: var(--text-light); margin-top: 2px; }
 
     /* ─── TRUST BAR ─── */
@@ -1382,7 +1382,6 @@ function updateCartUI() {
   const note = document.getElementById('deliveryNote');
   if (total >= 499) note.textContent = '🎉 You\'ve unlocked free delivery!';
   else note.textContent = `Add items worth ₹${499 - total} more for free delivery`;
-  document.getElementById('checkoutBtn').disabled = cart.length === 0;
 }
 
 function renderCartSidebar() {
@@ -1444,77 +1443,6 @@ function toggleWishlist(productId) {
   }
   localStorage.setItem('nk_wishlist', JSON.stringify(wishlist));
   renderProducts();
-}
-
-// ══════════════════════════════════════════════
-//  RAZORPAY CHECKOUT
-// ══════════════════════════════════════════════
-async function initiateCheckout() {
-  if (!currentUser) {
-    closeCart();
-    openAuthModal();
-    showToast('Please sign in to checkout', 'info');
-    return;
-  }
-  if (cart.length === 0) return;
-
-  const total = getCartTotal();
-  const deliveryCharge = total >= 499 ? 0 : 49;
-  const finalAmount = total + deliveryCharge;
-
-  const options = {
-    key: RAZORPAY_KEY_ID,
-    amount: finalAmount * 100, // paise
-    currency: 'INR',
-    name: 'Naatu Kozhi',
-    description: `Order of ${getCartCount()} item(s)`,
-    image: 'https://via.placeholder.com/150',
-    handler: async (response) => {
-      await saveOrderToSupabase(response, finalAmount);
-    },
-    prefill: {
-      name: currentUser.user_metadata?.full_name || '',
-      email: currentUser.email,
-      contact: currentUser.user_metadata?.phone || '',
-    },
-    theme: { color: '#C4522A' },
-    modal: {
-      ondismiss: () => showToast('Payment cancelled', 'info')
-    }
-  };
-
-  const rzp = new Razorpay(options);
-  rzp.on('payment.failed', (response) => {
-    showToast('Payment failed: ' + response.error.description, 'error');
-  });
-  rzp.open();
-  closeCart();
-}
-
-async function saveOrderToSupabase(paymentResponse, amount) {
-  try {
-    const { data, error } = await db.from('orders').insert([{
-      user_id: currentUser.id,
-      user_email: currentUser.email,
-      payment_id: paymentResponse.razorpay_payment_id,
-      items: cart.map(i => ({ id: i.id, name: i.name, qty: i.qty, price: i.price })),
-      total_amount: amount,
-      status: 'confirmed',
-      created_at: new Date().toISOString()
-    }]).select();
-
-    if (error) throw error;
-
-    cart = [];
-    saveCart();
-    updateCartUI();
-    renderProducts();
-    showToast('🎉 Order placed successfully! Thank you!', 'success');
-    loadOrders();
-  } catch (err) {
-    console.error('Order save error:', err);
-    showToast('Payment successful but order sync failed. Contact support.', 'error');
-  }
 }
 
 // ══════════════════════════════════════════════
