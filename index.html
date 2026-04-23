@@ -1074,14 +1074,14 @@ const PRODUCTS = [
   {
     id: 1, name: 'முழு நாட்டுக்கோழி (Whole Chicken)', category: 'whole',
     price: 599, oldPrice: 749, weight: '~1 kg',
-    emoji: '🐓', image: 'whole-chicken.jpg', badge: 'Best Seller', badgeType: 'hot',
+    emoji: '🐓', image: 'Menu_Item_01.png', badge: 'Best Seller', badgeType: 'hot',
     desc: 'இயற்கையான முறையில் வளர்ந்த முழு நாட்டுக்கோழி. ஞாயிற்றுக்கிழமை பிரியாணிக்கு சிறந்தது.',
     rating: 4.9, reviews: 248
   },
   {
     id: 2, name: 'கறி துண்டுகள் (Curry Cut)', category: 'curry-cut',
     price: 349, oldPrice: null, weight: '500g',
-    emoji: '🥘', image: 'curry-cut.jpg', badge: 'Fresh Today', badgeType: '',
+    emoji: '🥘', image: 'Menu_Item_02.png', badge: 'Fresh Today', badgeType: '',
     desc: 'சுவையான நாட்டுக்கோழி குழம்பு வைக்க ஏற்ற சரியான அளவில் வெட்டப்பட்ட துண்டுகள்.',
     rating: 4.8, reviews: 186
   },
@@ -1290,12 +1290,12 @@ function renderProducts() {
     return `
       <div class="product-card" id="product-${p.id}">
         ${p.badge ? `<div class="product-badge ${p.badgeType}">${p.badge}</div>` : ''}
-        <div class="product-img" style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f5f5f5;">
-  <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
-          <button class="product-wishlist" onclick="toggleWishlist(${p.id})" title="Wishlist">
-            ${wishlist.includes(p.id) ? '❤️' : '🤍'}
-          </button>
-        </div>
+        <div class="product-img" style="height: 200px; width: 100%; overflow: hidden; background-color: #f5f5f5; position: relative; display: flex; align-items: center; justify-content: center;">
+  <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
+  <button class="product-wishlist" onclick="toggleWishlist(${p.id})" title="Wishlist" style="z-index: 2; position: absolute; top: 12px; right: 12px;">
+    ${wishlist.includes(p.id) ? '❤️' : '🤍'}
+  </button>
+</div>
         <div class="product-info">
           <div class="product-category">${p.category.replace('-', ' ')}</div>
           <div class="product-name">${p.name}</div>
