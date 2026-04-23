@@ -1371,21 +1371,6 @@ function updateQty(productId, delta) {
     updateCartAndUI(); 
 }
 
-function saveCart() { localStorage.setItem('nk_cart', JSON.stringify(cart)); }
-
-function getCartTotal() { return cart.reduce((s, i) => s + (i.price * i.qty), 0); }
-function getCartCount() { return cart.reduce((s, i) => s + i.qty, 0); }
-
-function updateCartUI() {
-  const count = getCartCount();
-  document.getElementById('cartBadge').textContent = count;
-  const total = getCartTotal();
-  document.getElementById('cartTotalValue').textContent = `₹${total.toLocaleString('en-IN')}`;
-  const note = document.getElementById('deliveryNote');
-  if (total >= 499) note.textContent = '🎉 You\'ve unlocked free delivery!';
-  else note.textContent = `Add items worth ₹${499 - total} more for free delivery`;
-}
-
 function renderCartSidebar() {
   const container = document.getElementById('cartItemsContainer');
   if (cart.length === 0) {
@@ -1405,7 +1390,7 @@ function renderCartSidebar() {
         <div class="cart-item-weight">${item.weight}</div>
         <div class="cart-item-controls">
           <div class="qty-control">
-            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">−</button>
+            <button class="qty-btn" onclick="updateQty(${item.id}, -1)">-</button>
             <span class="qty-num">${item.qty}</span>
             <button class="qty-btn" onclick="updateQty(${item.id}, 1)">+</button>
           </div>
